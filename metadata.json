@@ -1,0 +1,6 @@
+{
+  "name": "Resume AI Studio - PRO",
+  "description": "Un sofisticado generador de CV y cartas de presentación impulsado por la API de Gemini. Analiza las descripciones de los puestos y los currículums para proporcionar un análisis estratégico que responde a preguntas clave: ¿Cómo encaja el candidato en el rol específico? ¿Qué resultados concretos demuestran su idoneidad? ¿Qué habilidades y fortalezas son más relevantes para la oferta? ¿Cómo sus logros indican su potencial futuro en la empresa? La IA también genera contenido personalizado de alto impacto para ayudarte a asegurar tu próximo puesto.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}

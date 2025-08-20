@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume AI Studio - PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Slab:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-serif { font-family: 'Lora', serif; }
+        .font-slab { font-family: 'Roboto Slab', serif; }
+        .font-mono { font-family: 'Source Code Pro', monospace; }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-glow {
+            box-shadow: 0 0 5px #0ea5e9, 0 0 10px #0ea5e9, 0 0 15px #0ea5e9;
+        }
+        .form-container, .preview-container {
+            height: calc(100vh - 4rem); /* Adjusted for header */
+            overflow-y: auto;
+        }
+        .resume-page {
+            background-color: white;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            width: 100%;
+            max-width: 8.5in;
+            margin: 1rem auto;
+            page-break-after: always;
+            position: relative;
+        }
+        
+        @media screen {
+            .resume-page {
+                min-height: 11in;
+            }
+        }
+
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: 1px solid #4b5563;
+            border-radius: 0.375rem;
+        }
+        
+        #pomodoro-widget input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            overflow: hidden;
+        }
+        #pomodoro-widget input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        #pomodoro-widget input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #page-container, #page-container * { visibility: visible; }
+            #page-container { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none; }
+            
+            .resume-page { 
+                margin: 0; 
+                box-shadow: none;
+                width: auto;
+                min-height: 0;
+                height: auto;
+            }
+
+            .item-wrapper {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            h2, h3, h4 {
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+
+            #page-container > div:last-child {
+                page-break-after: auto;
+            }
+        }
+
+        #settings-panel {
+            transform-origin: bottom right;
+        }
+      
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #FFF;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        .loader.loader-on-light {
+             border: 2px solid #4338ca;
+             border-bottom-color: transparent;
+        }
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^18.2.0/",
+    "react/": "https://esm.sh/react@^18.2.0/",
+    "react": "https://esm.sh/react@^18.2.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.13.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-gray-900 text-white">
+    <svg style="width:0; height:0; position:absolute;" aria-hidden="true" focusable="false">
+        <defs>
+            <clipPath id="brush-stroke-clip" clipPathUnits="objectBoundingBox">
+                <path d="M0.02,0.42 C0.04,0.3 0.12,0.2 0.22,0.15 C0.32,0.1 0.45,0.08 0.55,0.1 C0.7,0.13 0.8,0.2 0.9,0.3 C0.95,0.35 0.98,0.4 1,0.45 L0.98,0.55 C0.96,0.65 0.9,0.75 0.8,0.85 C0.7,0.95 0.6,0.98 0.5,1 C0.4,0.99 0.3,0.97 0.2,0.9 C0.1,0.83 0.05,0.75 0.02,0.65 L0,0.52 C0,0.5 0,0.45 0.02,0.42 Z"></path>
+            </clipPath>
+        </defs>
+    </svg>
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
