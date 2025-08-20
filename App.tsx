@@ -1,9 +1,10 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { ResumeData } from './types';
 import { INITIAL_RESUME_DATA } from './constants';
 import { ResumeForm } from './components/ResumeForm';
 import { ResumePreview } from './components/ResumePreview';
 import { PomodoroWidget } from './components/PomodoroWidget';
+import { WelcomeModal } from './components/WelcomeModal';
 
 const App: React.FC = () => {
   const [resumeData, setResumeData] = useState<ResumeData>(() => {
@@ -16,7 +17,20 @@ const App: React.FC = () => {
     }
   });
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const pageContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const hasSeenWelcome = localStorage.getItem('hasSeenWelcomeModal');
+    if (!hasSeenWelcome) {
+      setShowWelcomeModal(true);
+    }
+  }, []);
+
+  const handleCloseWelcomeModal = () => {
+    localStorage.setItem('hasSeenWelcomeModal', 'true');
+    setShowWelcomeModal(false);
+  };
   
   const handleSave = useCallback(() => {
     try {
@@ -47,11 +61,13 @@ const App: React.FC = () => {
     if (window.confirm('¿Estás seguro de que quieres borrar todo y empezar de nuevo?')) {
         setResumeData(INITIAL_RESUME_DATA);
         localStorage.removeItem('resumeData');
+        localStorage.removeItem('hasSeenWelcomeModal'); // Also reset welcome modal
     }
   }, []);
 
   return (
     <>
+      {showWelcomeModal && <WelcomeModal onClose={handleCloseWelcomeModal} />}
       <header className="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-20 no-print border-b border-gray-700/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">

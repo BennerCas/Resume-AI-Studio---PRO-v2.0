@@ -131,7 +131,7 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Welcome Modal Styles */
+        /* Welcome Modal Styles (used by React Component) */
         .modal {
           display: flex;
           align-items: center;
@@ -149,92 +149,6 @@
           transition: opacity 0.3s ease-in-out;
         }
 
-        .modal-content {
-          background-color: #1f2937; /* bg-gray-800 */
-          color: #d1d5db; /* text-gray-300 */
-          position: relative;
-          margin: auto;
-          padding: 2rem;
-          border: 1px solid #4b5563; /* border-gray-600 */
-          width: 90%;
-          max-width: 550px;
-          border-radius: 0.75rem; /* rounded-xl */
-          text-align: center;
-          box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-          transform: scale(1);
-          transition: transform 0.3s ease-in-out;
-        }
-
-        .modal.fade-out {
-          opacity: 0;
-        }
-        .modal.fade-out .modal-content {
-          transform: scale(0.95);
-        }
-        
-        .close-modal {
-          color: #9ca3af; /* text-gray-400 */
-          position: absolute;
-          top: 1rem;
-          right: 1.5rem;
-          font-size: 28px;
-          font-weight: bold;
-          line-height: 1;
-        }
-
-        .close-modal:hover,
-        .close-modal:focus {
-          color: #ffffff; /* text-white */
-          text-decoration: none;
-          cursor: pointer;
-        }
-        
-        .modal-content h2 {
-          font-family: 'Roboto Slab', serif;
-          margin-top: 0;
-          margin-bottom: 1rem;
-          font-size: 1.5rem;
-          color: #fff;
-        }
-
-        .modal-content p {
-            margin-bottom: 0.5rem;
-            color: #d1d5db;
-        }
-        .modal-content p b {
-            color: #e5e7eb;
-        }
-
-        .modal-content ol {
-          text-align: left;
-          display: inline-block;
-          margin-top: 1rem;
-          margin-bottom: 1.5rem;
-          padding-left: 1rem;
-        }
-        
-        .modal-content li {
-            margin-bottom: 0.5rem;
-        }
-
-        #close-modal-btn {
-          background-color: #0ea5e9; /* bg-sky-500 */
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          margin-top: 15px;
-          font-weight: bold;
-          box-shadow: 0 0 5px #0ea5e9, 0 0 10px #0ea5e9;
-          transition: all 0.2s ease;
-        }
-        
-        #close-modal-btn:hover {
-          background-color: #0284c7; /* hover:bg-sky-600 */
-          transform: translateY(-2px);
-        }
-
     </style>
 <script type="importmap">
 {
@@ -248,20 +162,6 @@
 </script>
 </head>
 <body class="bg-gray-900 text-white">
-    <div id="welcome-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h2>¡Bienvenido a Resume AI Studio Pro v2! 👋</h2>
-        <p>Esta herramienta te ayudará a adaptar tu currículum a cualquier oferta de trabajo usando inteligencia artificial.</p>
-        <p><b>Instrucciones:</b></p>
-        <ol>
-          <li><b>Pega tu CV</b> en el primer campo.</li>
-          <li><b>Pega la descripción del trabajo</b> en el segundo.</li>
-          <li><b>Haz clic en "Analizar con IA"</b> y ¡listo!</li>
-        </ol>
-        <button id="close-modal-btn">¡Entendido!</button>
-      </div>
-    </div>
     <svg style="width:0; height:0; position:absolute;" aria-hidden="true" focusable="false">
         <defs>
             <clipPath id="brush-stroke-clip" clipPathUnits="objectBoundingBox">
@@ -270,34 +170,5 @@
         </defs>
     </svg>
     <div id="root"></div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const modal = document.getElementById("welcome-modal");
-        if (!modal) return;
-
-        const closeModalElements = document.querySelectorAll(".close-modal, #close-modal-btn");
-
-        function closeModal() {
-          modal.classList.add('fade-out');
-          setTimeout(function() {
-            modal.style.display = "none";
-          }, 300); // Must match CSS transition duration
-        }
-
-        closeModalElements.forEach(el => {
-          el.addEventListener('click', closeModal);
-        });
-
-        window.addEventListener('click', function(event) {
-          if (event.target == modal) {
-            closeModal();
-          }
-        });
-        
-        modal.querySelector('.modal-content').addEventListener('click', function(event){
-            event.stopPropagation();
-        });
-      });
-    </script>
 </body>
 </html>
